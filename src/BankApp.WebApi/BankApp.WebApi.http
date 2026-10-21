@@ -1,6 +1,73 @@
-@BankApp.WebApi_HostAddress = http://localhost:5183
+@HostAddress = http://localhost:5183
 
-GET {{BankApp.WebApi_HostAddress}}/weatherforecast/
+### 1. Crear Perfil de Cliente (Requisito 1)
+# @name createCustomer
+POST {{HostAddress}}/api/customers
+Content-Type: application/json
+
+{
+  "fullName": "Hermant Gabriel Diaz Guadamuz",
+  "dateOfBirth": "1998-05-15",
+  "gender": "Masculino",
+  "monthlyIncome": 3500.00
+}
+
+###
+
+### Variable para reutilizar el ID del cliente recién creado
+@customerId = {{createCustomer.response.body.id}}
+
+### 2. Crear Cuenta Bancaria con Depósito Inicial (Requisito 2)
+# @name createAccount
+POST {{HostAddress}}/api/accounts
+Content-Type: application/json
+
+{
+  "customerId": "{{customerId}}",
+  "initialDeposit": 1000.00
+}
+
+###
+
+### Variable para reutilizar el número de cuenta generado
+@accountNumber = {{createAccount.response.body.accountNumber}}
+
+### 3. Consultar Saldo Actual (Requisito 3)
+GET {{HostAddress}}/api/accounts/{{accountNumber}}/balance
 Accept: application/json
 
 ###
+
+### 4. Registrar Depósito (Requisito 4)
+POST {{HostAddress}}/api/accounts/{{accountNumber}}/deposit
+Content-Type: application/json
+
+{
+  "amount": 500.00
+}
+
+###
+
+### 5. Registrar Retiro Exitoso (Requisito 4)
+POST {{HostAddress}}/api/accounts/{{accountNumber}}/withdraw
+Content-Type: application/json
+
+{
+  "amount": 300.00
+}
+
+###
+
+### 6. Registrar Retiro Rechazado por Fondos Insuficientes (Requisito 4 - RFC 7807)
+POST {{HostAddress}}/api/accounts/{{accountNumber}}/withdraw
+Content-Type: application/json
+
+{
+  "amount": 99999.00
+}
+
+###
+
+### 7. Consultar Historial Cronológico de Transacciones (Requisito 5)
+GET {{HostAddress}}/api/accounts/{{accountNumber}}/history
+Accept: application/json
