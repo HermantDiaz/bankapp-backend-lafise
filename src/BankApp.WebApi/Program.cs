@@ -34,15 +34,13 @@ var app = builder.Build();
 // Pipeline HTTP: Activamos el ExceptionHandler antes que cualquier otra cosa
 app.UseExceptionHandler();
 
-if (app.Environment.IsDevelopment())
+// Swagger UI habilitado para pruebas interactivas locales y evaluación
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "BankApp API v1");
-        c.RoutePrefix = string.Empty; // Abre Swagger directamente en la raíz (http://localhost:5000/)
-    });
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "BankApp API v1");
+    c.RoutePrefix = string.Empty; // Abre Swagger directamente en la raíz
+});
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
