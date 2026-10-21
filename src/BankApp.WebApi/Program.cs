@@ -25,7 +25,7 @@ builder.Services.AddSwaggerGen(options =>
     {
         Title = "BankApp API - Sistemática / Grupo LAFISE",
         Version = "v1",
-        Description = "API REST de Banca Digital desarrollada por Gabriel en .NET 10 con Clean Architecture."
+        Description = "API REST De Banca Digital desarrollada por Hermant Gabriel Diaz Guadamuz"
     });
 });
 
